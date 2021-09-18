@@ -10,12 +10,14 @@ package com.eggweb.inventario;
  * @author carna
  */
 public class modificaProdotto extends javax.swing.JFrame {
-
+    private String cod;
     /**
      * Creates new form modificaProdotto
      */
-    public modificaProdotto(ProdottiClass prod) {
+    public modificaProdotto(String cod) {
+        this.cod = cod;
         initComponents();
+        jTextField3.setText(cod);
         
     }
 

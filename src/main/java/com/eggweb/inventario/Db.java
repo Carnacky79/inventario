@@ -136,24 +136,55 @@ public class Db {
     
     public boolean vendiFromCodice(String cod, int quantita) throws SQLException{
         boolean result = false;
+        int quantitaInMagazzino = selezionaQuantitaFromCodice(cod);
+        
+        if(quantita > quantitaInMagazzino)
+            return result;
+        
         openConnection();
         
+        
         String SQL_Query = "insert into vendite (cod_prodotto, quantita_venduta) values(?,?)";
+        String SQL_subtract = "update prodotti set quantita = quantita - ?";
                 
         PreparedStatement stmt=c.prepareStatement(SQL_Query);  
+        PreparedStatement stmt2=c.prepareStatement(SQL_subtract); 
         
         stmt.setString(1,cod);  
         stmt.setInt(2, quantita);
         
-        int i = stmt.executeUpdate();  
+        stmt2.setInt(1, quantita);
+        
+        int i = stmt.executeUpdate(); 
+        int i2 = stmt2.executeUpdate();
         
         closeConnection();
         
-        if(i > 0){
+        if(i > 0 && i2 > 0){
             result = true;
         }
         
         return result;
+    }
+    
+    private int selezionaQuantitaFromCodice(String cod) throws SQLException{
+        int quantita = 0;
+        openConnection();
+        
+        String SQL_Query = "SELECT DISTINCT " + "prodotti.quantita" + " FROM " +"prodotti" +" WHERE " + " prodotti.cod_prodotto = " + cod + "";
+        
+        Statement stmt = c.createStatement();
+            
+            
+            ResultSet rs = stmt.executeQuery(SQL_Query);
+
+            while(rs.next()){
+                quantita = rs.getInt(1);
+            }
+    
+            closeConnection();
+        
+        return quantita;
     }
     
     public boolean aggiuntaProdotti(String nome, int id_cat, float vendita, float acquisto, int quantita, String desc, String cod) throws SQLException{

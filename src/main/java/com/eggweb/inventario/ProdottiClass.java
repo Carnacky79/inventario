@@ -18,5 +18,12 @@ public class ProdottiClass {
     private String descrizione;
     private String codice;
     
-    
+    public ProdottiClass(String nome, int id_cat, float vendita, float acquisto, int quantita, String descrizione, String codice){
+        this.nome = nome;
+        this.id_cat = id_cat;
+        this.vendita = vendita;
+        this.acquisto = acquisto;
+        this.descrizione = descrizione;
+        this.codice = codice;
+    }
 }

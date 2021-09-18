@@ -35,14 +35,19 @@ public class MainFrame extends javax.swing.JFrame {
         this.db = new Db();
         initComponents();
         
-        String[] arr = new String[db.seleziona("alfabetico").size()];
-        arr = db.seleziona("alfabetico").toArray(arr);
+        mostraMagazzino();
         
         String[] arrCat = new String[db.selezionaCategorie().size()];
         arrCat = db.selezionaCategorie().toArray(arrCat);
         
-        jList3.setListData(arr);
+        
         jList2.setListData(arrCat);
+    }
+    
+    private void mostraMagazzino() throws SQLException{
+        String[] arr = new String[db.seleziona("alfabetico").size()];
+        arr = db.seleziona("alfabetico").toArray(arr);
+        jList3.setListData(arr);
     }
 
     /**
@@ -247,9 +252,9 @@ public class MainFrame extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
+                        .addGap(27, 27, 27)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(56, 56, 56)
+                        .addGap(27, 27, 27)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -443,6 +448,9 @@ public class MainFrame extends javax.swing.JFrame {
             boolean res = db.vendiFromCodice(cod, quantita);
             if(res){
                 mostraDialogo("Vendita eseguita correttamente");
+                mostraMagazzino();
+            }else{
+                mostraDialogo("Errore nella vendita");
             }
         } catch (SQLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -523,9 +531,10 @@ public class MainFrame extends javax.swing.JFrame {
         }
         
         if(nome.length() > 0){
+            
             int ans = mostraOption("Prodotto già esistente", "Si desidera modificarlo?");
             if(ans == YES_OPTION){
-                new modificaProdotto().setVisible(true);
+                new modificaProdotto(codice_prodotto).setVisible(true);
             }else{
                 
             }
